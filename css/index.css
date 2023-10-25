@@ -1,0 +1,8 @@
+body{
+    background-image: url("../IMG/fondo.jpg"); background-size: cover;
+}
+
+.bg-trans{
+    background-color: rgba(112, 112, 112, 0.281);
+backdrop-filter: blur(10px);
+}
