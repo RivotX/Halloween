@@ -1,4 +1,4 @@
-//set up
+//set up 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');  //canvas context
 
@@ -58,7 +58,7 @@ class Sprite {
         }, 100);
     }
 }
-
+//clase flecha
 class Flecha {
     constructor({ position, velocidad, height, width, color }) {
         this.position = position;
@@ -88,6 +88,9 @@ class Flecha {
         this.isAttacking = true;
     }
 }
+
+
+
 const daga = new Sprite({
     position: {
         x: 0,
@@ -147,8 +150,6 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     daga.velocidad.x = 0;
     arquero.velocidad.x = 0;
 
-
-
     // Movilidad de daga
     if (keys.d.presionada == true && daga.UltimaTeclaHorizontal === "d") {
         daga.velocidad.x = 1;
@@ -175,6 +176,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
         arquero.velocidad.y = arquero.velocidad.y = 8;
     }
     //chatgpt (no lo sacaba) -- UPDATE DE LAS FLECHAS
+    // Actualiza y muestra todas las flechas
     for (let i = 0; i < flechas.length; i++) {
         flechas[i].update();
         if (flechas[i].position.x < 0) {
@@ -232,7 +234,9 @@ const keys = {
     s: {
         presionada: false
     },
-
+    l: {
+        presionada: false
+    },
     ArrowRight: {
         presionada: false
     },
@@ -247,14 +251,9 @@ const keys = {
     }
 }
 
-/*var DagaUltimaTeclaHorizontal;
-var DagaUltimaTeclaVertical;
-
-var ArqueroUltimaTeclaHorizontal;
-var ArqueroUltimaTeclaVertical;*/
 
 
-
+let flechaDisparada = false;
 
 window.addEventListener('keydown', function (event) {
     switch (event.key) {
@@ -278,21 +277,26 @@ window.addEventListener('keydown', function (event) {
             daga.ataque();
             break;
         case "l":
-            const nuevaFlecha = new Flecha({
-                position: {
-                    x: arquero.position.x + arquero.width, // Inicia desde la posición del arquero
-                    y: arquero.position.y + arquero.height / 2, // Altura media del arquero
-                },
-                velocidad: {
-                    x: -6, // Velocidad de la flecha
-                    y: 0,
-                },
-                height: 10,
-                width: 30,
-                color: 'yellow',
-            });
-            nuevaFlecha.disparar(arquero.position.x + arquero.width, arquero.position.y + arquero.height / 2);
-            flechas.push(nuevaFlecha);
+            keys.l.presionada=true;
+            if (keys.l.presionada) {
+                console.log('l');
+                const nuevaFlecha = new Flecha({
+                    position: {
+                        x: arquero.position.x + arquero.width,
+                        y: arquero.position.y + arquero.height / 2,
+                    },
+                    velocidad: {
+                        x: -6,
+                        y: 0,
+                    },
+                    height: 10,
+                    width: 30,
+                    color: 'yellow',
+                });
+                nuevaFlecha.disparar(arquero.position.x + arquero.width, arquero.position.y + arquero.height / 2);
+                flechas.push(nuevaFlecha); 
+                 // Agrega la nueva flecha al array
+            }
             break;
 
         case "ArrowRight":
@@ -328,6 +332,9 @@ window.addEventListener('keyup', function (event) {
         case "s":
             keys.s.presionada = false;
             break;
+        case "l":
+            keys.l.presionada = false;
+            break;
 
         case "ArrowRight":
             keys.ArrowRight.presionada = false;
@@ -343,5 +350,8 @@ window.addEventListener('keyup', function (event) {
             break;
     }
 })
+function resetFlechaDisparada() {
+    flechaDisparada = false;
+}
 
 animate();
