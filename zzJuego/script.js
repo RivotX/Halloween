@@ -17,6 +17,8 @@ class Sprite {
         this.position = position;
         this.velocidad = velocidad;
         this.height = height;
+        this.UltimaTeclaHorizontal;
+        this.UltimaTeclaVertical;
     }
     pintar() {
         c.fillStyle = "red";
@@ -46,7 +48,7 @@ const daga = new Sprite({
         x: 0,
         y: 0
     },
-    height: 90
+    height: 90,
 });
 daga.pintar();
 
@@ -59,7 +61,7 @@ const arquero = new Sprite({
         x: 0,
         y: 0
     },
-    height: 90
+    height: 90,
 });
 
 arquero.pintar();
@@ -75,30 +77,30 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     arquero.velocidad.x = 0;
 
     //Movilidad de daga
-    if (keys.d.presionada == true && DagaUltimaTeclaHorizontal === "d") {
+    if (keys.d.presionada == true && daga.UltimaTeclaHorizontal === "d") {
         daga.velocidad.x = 1;
-    } else if (keys.a.presionada == true && DagaUltimaTeclaHorizontal === "a") {
+    } else if (keys.a.presionada == true && daga.UltimaTeclaHorizontal === "a") {
         daga.velocidad.x = -1
     }
 
-    if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height && keys.w.presionada == true && DagaUltimaTeclaVertical === "w") {
+    if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
         daga.velocidad.y = -8;
 
-    } else if (daga.velocidad.y > 0 && keys.s.presionada == true && DagaUltimaTeclaVertical === "s") {
+    } else if (daga.velocidad.y > 0 && keys.s.presionada == true && daga.UltimaTeclaVertical === "s") {
         daga.velocidad.y = daga.velocidad.y = 8;
     }
 
     //Movilidad de arquero
-    if (keys.ArrowRight.presionada == true && ArqueroUltimaTeclaHorizontal === "ArrowRight") {
+    if (keys.ArrowRight.presionada == true && arquero.UltimaTeclaHorizontal === "ArrowRight") {
         arquero.velocidad.x = 1;
-    } else if (keys.ArrowLeft.presionada == true && ArqueroUltimaTeclaHorizontal === "ArrowLeft") {
+    } else if (keys.ArrowLeft.presionada == true && arquero.UltimaTeclaHorizontal === "ArrowLeft") {
         arquero.velocidad.x = -1
     }
 
-    if (arquero.position.y + arquero.height + arquero.velocidad.y >= canvas.height && keys.ArrowUp.presionada == true && ArqueroUltimaTeclaVertical === "ArrowUp") {
+    if (arquero.position.y + arquero.height + arquero.velocidad.y >= canvas.height && keys.ArrowUp.presionada == true && arquero.UltimaTeclaVertical === "ArrowUp") {
         arquero.velocidad.y = -8;
 
-    } else if (arquero.velocidad.y > 0 && keys.ArrowDown.presionada == true && ArqueroUltimaTeclaVertical === "ArrowDown") {
+    } else if (arquero.velocidad.y > 0 && keys.ArrowDown.presionada == true && arquero.UltimaTeclaVertical === "ArrowDown") {
         arquero.velocidad.y = arquero.velocidad.y = 8;
     }
 }
@@ -131,11 +133,11 @@ const keys = {
     }
 }
 
-var DagaUltimaTeclaHorizontal;
+/*var DagaUltimaTeclaHorizontal;
 var DagaUltimaTeclaVertical;
 
 var ArqueroUltimaTeclaHorizontal;
-var ArqueroUltimaTeclaVertical;
+var ArqueroUltimaTeclaVertical;*/
 
 
 
@@ -144,36 +146,36 @@ window.addEventListener('keydown', function (event) {
     switch (event.key) {
         case "d":
             keys.d.presionada = true;
-            DagaUltimaTeclaHorizontal = "d";
+            daga.UltimaTeclaHorizontal = "d";
             break;
         case "a":
             keys.a.presionada = true;
-            DagaUltimaTeclaHorizontal = "a";
+            daga.UltimaTeclaHorizontal = "a";
             break;
         case "w":
             keys.w.presionada = true;
-            DagaUltimaTeclaVertical = "w";
+            daga.UltimaTeclaVertical = "w";
             break;
         case "s":
             keys.s.presionada = true;
-            DagaUltimaTeclaVertical = "s";
+            daga.UltimaTeclaVertical = "s";
             break;
 
         case "ArrowRight":
             keys.ArrowRight.presionada = true;
-            ArqueroUltimaTeclaHorizontal = "ArrowRight";
+            arquero.UltimaTeclaHorizontal = "ArrowRight";
             break;
         case "ArrowLeft":
             keys.ArrowLeft.presionada = true;
-            ArqueroUltimaTeclaHorizontal = "ArrowLeft";
+            arquero.UltimaTeclaHorizontal = "ArrowLeft";
             break;
         case "ArrowUp":
             keys.ArrowUp.presionada = true;
-            ArqueroUltimaTeclaVertical = "ArrowUp";
+            arquero.UltimaTeclaVertical = "ArrowUp";
             break;
         case "ArrowDown":
             keys.ArrowDown.presionada = true;
-            ArqueroUltimaTeclaVertical = "ArrowDown";
+            arquero.UltimaTeclaVertical = "ArrowDown";
             break;
     }
 })
@@ -206,8 +208,5 @@ window.addEventListener('keyup', function (event) {
             break;
     }
 })
-
-
-
 
 animate();
