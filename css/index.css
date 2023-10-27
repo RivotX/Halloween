@@ -1,7 +1,13 @@
+@font-face {
+    font-family:halloween;
+    src: url(../DangerNightPersonalUse-owdl4.ttf);
+}
 body{
+
     
     background: fixed url("../img/potion-2217630.jpg"); background-size: cover;
     background-size: cover;
+
     
 
 }
@@ -23,4 +29,23 @@ backdrop-filter: blur(10px);
     transform: scale(1.1);
  transition: all 0.2s;
  background-color: rgba(240, 248, 255, 0);
+}
+.carousel{
+    margin-left: 18%;
+    margin-top: 3%;
+    height: 650px;
+    width: 1200px;
+}
+.recetasimg{
+    height: 650px;
+    width: 1200px;
+}
+.titulo{
+    font-family:halloween;
+}
+.fff{
+    font-size: 5rem;
+}
+.boton{
+
 }
