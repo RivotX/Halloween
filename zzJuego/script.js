@@ -32,6 +32,8 @@ class Sprite {
         this.color = color;
         this.isAttacking;
         this.hp = hp;
+        this.siendoEmpujado = false;
+        this.empujeUsado = false;
     }
     pintar() {
         c.fillStyle = this.color;
@@ -166,11 +168,19 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     arquero.velocidad.x = 0;
 
     // Movilidad de daga
-    if (keys.d.presionada == true && daga.UltimaTeclaHorizontal === "d") {
-        daga.velocidad.x = 5;
-    } else if (keys.a.presionada == true && daga.UltimaTeclaHorizontal === "a") {
-        daga.velocidad.x = -5
+    if (daga.siendoEmpujado && !arquero.empujeUsado) {
+        daga.velocidad.x = -20
     }
+    else {
+        if (keys.d.presionada == true && daga.UltimaTeclaHorizontal === "d") {
+            daga.velocidad.x = 5;
+        } else if (keys.a.presionada == true && daga.UltimaTeclaHorizontal === "a") {
+            daga.velocidad.x = -5
+        } //else if (keys.k.presionada == true && !arquero.empuje) {
+
+        // }
+    }
+
     if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
         daga.velocidad.y = -20;
 
@@ -366,14 +376,19 @@ window.addEventListener('keydown', function (event) {
             break;
 
         case "k":
-            var tiempoActual = Date.now(); // Obtiene el tiempo actual
+            keys.k.presionada = true;
+            daga.siendoEmpujado = true;
+            this.setTimeout(function () {
+                daga.siendoEmpujado = false;
+                arquero.empujeUsado = true;
+            }, 600);
 
-            if (!arquero.empuje) {
-                arquero.empuje = true;
-                console.log("empuje");
-                keys.k.presionada = true;
-                daga.position = { x: 0, y: 700 };
-            }
+        // if (!arquero.empuje) {
+        //     arquero.empuje = true;
+        //     console.log("empuje");
+        //     keys.a.presionada = true;
+        //     daga.velocidad.x = -10;
+        // }
     }
 })
 window.addEventListener('keyup', function (event) {
