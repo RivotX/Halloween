@@ -68,6 +68,16 @@ class Sprite {
             this.isAttacking = false;
         }, 100);
     }
+    // cambiarPosiciones(jugador1, jugador2) {
+    //     var tempX = posicion1x;
+    //     var tempY = posicion1y;
+    //     posicion1x = posicion2x;
+    //     posicion1y = posicion2y;
+    //     posicion2x = tempX;
+    //     posicion2y = tempY;
+
+
+    // }
 }
 
 //clase flecha
@@ -155,7 +165,6 @@ const flecha = new Flecha({
 });
 flecha.pintar();
 
-
 const flechas = [];
 function animate() { //esta funcion se esta llamando a si misma, es infinita hasta que acabe el juego (bastantes fps)
     window.requestAnimationFrame(animate);
@@ -167,18 +176,24 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     daga.velocidad.x = 0;
     arquero.velocidad.x = 0;
 
-    // Movilidad de daga
-    if (daga.siendoEmpujado && !arquero.empujeUsado) {
-        daga.velocidad.x = -20
+    if (daga.position.x < arquero.position.x) {
+        if (daga.siendoEmpujado && !arquero.empujeUsado) {
+            daga.velocidad.x = -20
+        }
     }
     else {
+        if (daga.siendoEmpujado && !arquero.empujeUsado) {
+            daga.velocidad.x = 20
+
+        }
+    }
+    // Movilidad de daga
+    if (!daga.siendoEmpujado) {
         if (keys.d.presionada == true && daga.UltimaTeclaHorizontal === "d") {
             daga.velocidad.x = 5;
         } else if (keys.a.presionada == true && daga.UltimaTeclaHorizontal === "a") {
             daga.velocidad.x = -5
-        } //else if (keys.k.presionada == true && !arquero.empuje) {
-
-        // }
+        }
     }
 
     if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
@@ -282,7 +297,7 @@ const keys = {
 
 let ultimaVezDisparoFlecha = 0;
 
-
+contador = 0;
 
 window.addEventListener('keydown', function (event) {
     switch (event.key) {
@@ -377,11 +392,15 @@ window.addEventListener('keydown', function (event) {
 
         case "k":
             keys.k.presionada = true;
-            daga.siendoEmpujado = true;
-            this.setTimeout(function () {
-                daga.siendoEmpujado = false;
-                arquero.empujeUsado = true;
-            }, 600);
+            console.log('contador :>> ', contador);
+            if (contador < 1) {
+                contador++
+                daga.siendoEmpujado = true;
+                this.setTimeout(function () {
+                    daga.siendoEmpujado = false;
+                    arquero.empujeUsado = true;
+                }, 600);
+            }
 
         // if (!arquero.empuje) {
         //     arquero.empuje = true;
@@ -425,5 +444,27 @@ window.addEventListener('keyup', function (event) {
             break;
     }
 })
+
+
+function cambiarPosiciones(jugador1, jugador2) {
+    var tempX = daga.position.x;
+    var tempY = daga.position.y;
+    daga.position.x = arquero.position.x;
+    daga.position.y = arquero.position.y;
+    arquero.position.x = tempX;
+    arquero.position.y = tempY;
+}
+
+setTimeout(function () {
+    cambiarPosiciones(daga, arquero);
+    console.log('cambio');
+}, 5500);
+
+
+setTimeout(function () {
+    cambiarPosiciones(daga, arquero);
+    console.log('cambio');
+}, 10000);
+
 
 animate();
