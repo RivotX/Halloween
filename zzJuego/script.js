@@ -68,16 +68,7 @@ class Sprite {
             this.isAttacking = false;
         }, 100);
     }
-    // cambiarPosiciones(jugador1, jugador2) {
-    //     var tempX = posicion1x;
-    //     var tempY = posicion1y;
-    //     posicion1x = posicion2x;
-    //     posicion1y = posicion2y;
-    //     posicion2x = tempX;
-    //     posicion2y = tempY;
 
-
-    // }
 }
 
 //clase flecha
@@ -189,12 +180,13 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     }
     // Movilidad de daga
     if (!daga.siendoEmpujado) {
-        if (keys.d.presionada == true && daga.UltimaTeclaHorizontal === "d") {
+        if (keys.d.presionada && daga.UltimaTeclaHorizontal === "d" && daga.position.x + daga.width < canvas.width) {
             daga.velocidad.x = 5;
-        } else if (keys.a.presionada == true && daga.UltimaTeclaHorizontal === "a") {
-            daga.velocidad.x = -5
+        } else if (keys.a.presionada && daga.UltimaTeclaHorizontal === "a" && daga.position.x > 0) {
+            daga.velocidad.x = -5;
         }
     }
+
 
     if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
         daga.velocidad.y = -20;
