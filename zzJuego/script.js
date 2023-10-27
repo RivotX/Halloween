@@ -167,8 +167,8 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     daga.velocidad.x = 0;
     arquero.velocidad.x = 0;
 
-    if (daga.position.x < arquero.position.x ) {
-        if (daga.siendoEmpujado && !arquero.habilidadUsada && daga.position.x > 0 )  {
+    if (daga.position.x < arquero.position.x) {
+        if (daga.siendoEmpujado && !arquero.habilidadUsada && daga.position.x > 0) {
             daga.velocidad.x = -20
         }
     }
@@ -226,6 +226,9 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
         daga.isAttacking = false;
         arquero.hp -= 1;
+        if (arquero.hp <= 0) {
+            alert("gana daga")
+        }
         console.log(arquero.hp);
     }
 
@@ -249,6 +252,10 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
             console.log("daga hp = ", daga.hp);
             flechas.splice(i, 1); // Elimina la flecha al impactar
             i--;
+
+            if (daga.hp <= 0) {
+                alert("gana arquero");
+            }
         }
     }
 }
