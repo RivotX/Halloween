@@ -2,15 +2,15 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');  //canvas context
 
-canvas.width = 900;
-canvas.height = 576;
+canvas.width = 1400;
+canvas.height = 800;
 
 c.fillRect(0, 0, canvas.width, canvas.height); //fillRect(x: number, y: number, w: number, h: number): pinta
 
 
 // ------------- lo weno ------------//
 
-const gravedad = 0.2; // literalmente 0.2px de gravedad para añadirla a la velocidad.y
+const gravedad = 1; // literalmente 1px de gravedad para añadirla a la velocidad.y
 
 class Sprite {
     constructor({ position, velocidad, height, width, color, hp }) { // paso parametros con objetos en vez de con muchas propiedades distintas, mas sencillo
@@ -21,10 +21,14 @@ class Sprite {
         this.UltimaTeclaHorizontal;
         this.UltimaTeclaVertical;
         this.ataqueHitbox = {
-            position: this.position,
-            width: 100,
+            position: {
+                x: this.position.x - this.width / 2, // Posición x centrada
+                y: this.position.y
+            },
+            width: 150,
             height: 30
         }
+        this.empuje = false;
         this.color = color;
         this.isAttacking;
         this.hp = hp;
@@ -42,15 +46,20 @@ class Sprite {
     update() {
         this.pintar();
 
-        // si el jugador está en el suelo, para de bajar (velocidad.y=0), si no, le afecta la gravedad (+0.2/cada animate)
+        // si el jugador está en el suelo, para de bajar (velocidad.y=0), si no, le afecta la gravedad (+0.7/cada animate)
         if (this.position.y + this.height + this.velocidad.y >= canvas.height) {
             this.velocidad.y = 0;
         } else {
             this.velocidad.y += gravedad;
         }
-        this.position.y += this.velocidad.y; //this.position.y = this.position.y + this.velocidad.y;
-        this.position.x += this.velocidad.x;
+        this.position.y += this.velocidad.y; // Actualiza la posición y
+        this.position.x += this.velocidad.x; // Actualiza la posición x
+
+        // Actualiza la posición de la hitbox junto con la posición del jugador
+        this.ataqueHitbox.position.x = this.position.x - this.width; //(width hitbox = 150, width daga = 50, empieza en la posición 50 asi que sobresalen 50 por cada lado (150/3))
+        this.ataqueHitbox.position.y = this.position.y;
     }
+
     ataque() {
         this.isAttacking = true;
         setTimeout(() => {
@@ -58,6 +67,7 @@ class Sprite {
         }, 100);
     }
 }
+
 //clase flecha
 class Flecha {
     constructor({ position, velocidad, height, width, color }) {
@@ -67,6 +77,7 @@ class Flecha {
         this.height = height;
         this.color = color;
         this.isAttacking = false; // Indica si la flecha está en vuelo
+        this.flechaDisparada = false;
     }
 
     pintar() {
@@ -86,6 +97,10 @@ class Flecha {
         this.position.x = x;
         this.position.y = y;
         this.isAttacking = true;
+    }
+    resetFlechaDisparada() {
+        this.flechaDisparada = false;
+        console.log("flechaDisparada = ", this.flechaDisparada);
     }
 }
 
@@ -109,7 +124,7 @@ daga.pintar();
 
 const arquero = new Sprite({
     position: {
-        x: 500,
+        x: 1350,
         y: 0
     },
     velocidad: {
@@ -152,28 +167,28 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
     // Movilidad de daga
     if (keys.d.presionada == true && daga.UltimaTeclaHorizontal === "d") {
-        daga.velocidad.x = 1;
+        daga.velocidad.x = 5;
     } else if (keys.a.presionada == true && daga.UltimaTeclaHorizontal === "a") {
-        daga.velocidad.x = -1
+        daga.velocidad.x = -5
     }
     if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
-        daga.velocidad.y = -8;
+        daga.velocidad.y = -20;
 
     } else if (daga.velocidad.y > 0 && keys.s.presionada == true && daga.UltimaTeclaVertical === "s") {
-        daga.velocidad.y = daga.velocidad.y = 8;
+        daga.velocidad.y = daga.velocidad.y = 20;
     }
 
     // Movilidad de arquero
     if (keys.ArrowRight.presionada == true && arquero.UltimaTeclaHorizontal === "ArrowRight") {
-        arquero.velocidad.x = 1;
+        arquero.velocidad.x = 3;
     } else if (keys.ArrowLeft.presionada == true && arquero.UltimaTeclaHorizontal === "ArrowLeft") {
-        arquero.velocidad.x = -1
+        arquero.velocidad.x = -3
     }
     if (arquero.position.y + arquero.height + arquero.velocidad.y >= canvas.height && keys.ArrowUp.presionada == true && arquero.UltimaTeclaVertical === "ArrowUp") {
-        arquero.velocidad.y = -8;
+        arquero.velocidad.y = -20;
 
     } else if (arquero.velocidad.y > 0 && keys.ArrowDown.presionada == true && arquero.UltimaTeclaVertical === "ArrowDown") {
-        arquero.velocidad.y = arquero.velocidad.y = 8;
+        arquero.velocidad.y = arquero.velocidad.y = 20;
     }
     //chatgpt (no lo sacaba) -- UPDATE DE LAS FLECHAS
     // Actualiza y muestra todas las flechas
@@ -198,8 +213,8 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     }
 
     if (arquero.hp == 0) {
-        alert("El Rogue ha apuñalado al arquero");
         arquero.hp = -1;
+        console.log('arquero.hp :>> ', arquero.hp);
     }
 
     //colision flechas
@@ -214,7 +229,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
             flecha.isAttacking
         ) {
             daga.hp -= 1;
-            console.log(daga.hp);
+            console.log("daga hp = ", daga.hp);
             flechas.splice(i, 1); // Elimina la flecha al impactar
             i--;
         }
@@ -248,12 +263,16 @@ const keys = {
     },
     ArrowDown: {
         presionada: false
+    },
+    k: {
+        presionada: false
     }
 }
 
 
+let ultimaVezDisparoFlecha = 0;
 
-let flechaDisparada = false;
+
 
 window.addEventListener('keydown', function (event) {
     switch (event.key) {
@@ -277,25 +296,55 @@ window.addEventListener('keydown', function (event) {
             daga.ataque();
             break;
         case "l":
-            keys.l.presionada=true;
-            if (keys.l.presionada) {
-                console.log('l');
-                const nuevaFlecha = new Flecha({
-                    position: {
-                        x: arquero.position.x + arquero.width,
-                        y: arquero.position.y + arquero.height / 2,
-                    },
-                    velocidad: {
-                        x: -6,
-                        y: 0,
-                    },
-                    height: 10,
-                    width: 30,
-                    color: 'yellow',
-                });
-                nuevaFlecha.disparar(arquero.position.x + arquero.width, arquero.position.y + arquero.height / 2);
-                flechas.push(nuevaFlecha); 
-                 // Agrega la nueva flecha al array
+            var tiempoActual = Date.now(); // Obtiene el tiempo actual
+            if (arquero.position.x >= daga.position.x) {
+                if (tiempoActual - ultimaVezDisparoFlecha >= 700) {
+                    ultimaVezDisparoFlecha = tiempoActual;  // Actualiza el tiempo del último disparo
+                    console.log("disparo");
+                    keys.l.presionada = true;
+                    flecha.flechaDisparada = true; // Establece flechaDisparada en true
+                    console.log('l');
+                    const nuevaFlecha = new Flecha({
+                        position: {
+                            x: arquero.position.x + arquero.width,
+                            y: arquero.position.y + arquero.height / 2,
+                        },
+                        velocidad: {
+                            x: -18,
+                            y: 0,
+                        },
+                        height: 10,
+                        width: 30,
+                        color: 'yellow',
+                    });
+                    nuevaFlecha.disparar(arquero.position.x + arquero.width, arquero.position.y + arquero.height / 2);
+                    flechas.push(nuevaFlecha);
+                    // Agrega la nueva flecha al array
+                }
+            } else {
+                if (tiempoActual - ultimaVezDisparoFlecha >= 800) {
+                    ultimaVezDisparoFlecha = tiempoActual;  // Actualiza el tiempo del último disparo
+                    console.log("disparo");
+                    keys.l.presionada = true;
+                    flecha.flechaDisparada = true; // Establece flechaDisparada en true
+                    console.log('l');
+                    const nuevaFlecha = new Flecha({
+                        position: {
+                            x: arquero.position.x + arquero.width,
+                            y: arquero.position.y + arquero.height / 2,
+                        },
+                        velocidad: {
+                            x: 18,
+                            y: 0,
+                        },
+                        height: 10,
+                        width: 30,
+                        color: 'yellow',
+                    });
+                    nuevaFlecha.disparar(arquero.position.x + arquero.width, arquero.position.y + arquero.height / 2);
+                    flechas.push(nuevaFlecha);
+                    // Agrega la nueva flecha al array
+                }
             }
             break;
 
@@ -316,6 +365,15 @@ window.addEventListener('keydown', function (event) {
             arquero.UltimaTeclaVertical = "ArrowDown";
             break;
 
+        case "k":
+            var tiempoActual = Date.now(); // Obtiene el tiempo actual
+
+            if (!arquero.empuje) {
+                arquero.empuje = true;
+                console.log("empuje");
+                keys.k.presionada = true;
+                daga.position = { x: 0, y: 700 };
+            }
     }
 })
 window.addEventListener('keyup', function (event) {
@@ -335,7 +393,6 @@ window.addEventListener('keyup', function (event) {
         case "l":
             keys.l.presionada = false;
             break;
-
         case "ArrowRight":
             keys.ArrowRight.presionada = false;
             break;
@@ -348,10 +405,10 @@ window.addEventListener('keyup', function (event) {
         case "ArrowDown":
             keys.ArrowDown.presionada = false;
             break;
+        case "k":
+            keys.k.presionada = false;
+            break;
     }
 })
-function resetFlechaDisparada() {
-    flechaDisparada = false;
-}
 
 animate();
