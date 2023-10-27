@@ -33,7 +33,7 @@ class Sprite {
         this.isAttacking;
         this.hp = hp;
         this.siendoEmpujado = false;
-        this.empujeUsado = false;
+        this.habilidadUsada = false;
     }
     pintar() {
         c.fillStyle = this.color;
@@ -168,12 +168,12 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     arquero.velocidad.x = 0;
 
     if (daga.position.x < arquero.position.x ) {
-        if (daga.siendoEmpujado && !arquero.empujeUsado && daga.position.x > 0 )  {
+        if (daga.siendoEmpujado && !arquero.habilidadUsada && daga.position.x > 0 )  {
             daga.velocidad.x = -20
         }
     }
     else {
-        if (daga.siendoEmpujado && !arquero.empujeUsado && daga.position.x + daga.width < canvas.width) {
+        if (daga.siendoEmpujado && !arquero.habilidadUsada && daga.position.x + daga.width < canvas.width) {
             daga.velocidad.x = 20
 
         }
@@ -283,6 +283,9 @@ const keys = {
     },
     k: {
         presionada: false
+    },
+    f: {
+        presionada: false
     }
 }
 
@@ -390,7 +393,7 @@ window.addEventListener('keydown', function (event) {
                 daga.siendoEmpujado = true;
                 this.setTimeout(function () {
                     daga.siendoEmpujado = false;
-                    arquero.empujeUsado = true;
+                    arquero.habilidadUsada = true;
                 }, 600);
             }
 
