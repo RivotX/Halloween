@@ -167,13 +167,13 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     daga.velocidad.x = 0;
     arquero.velocidad.x = 0;
 
-    if (daga.position.x < arquero.position.x) {
-        if (daga.siendoEmpujado && !arquero.empujeUsado) {
+    if (daga.position.x < arquero.position.x ) {
+        if (daga.siendoEmpujado && !arquero.empujeUsado && daga.position.x > 0 )  {
             daga.velocidad.x = -20
         }
     }
     else {
-        if (daga.siendoEmpujado && !arquero.empujeUsado) {
+        if (daga.siendoEmpujado && !arquero.empujeUsado && daga.position.x + daga.width < canvas.width) {
             daga.velocidad.x = 20
 
         }
