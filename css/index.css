@@ -5,7 +5,7 @@
 body{
 
     
-    background: fixed url("../img/potion-2217630.jpg"); background-size: cover;
+    background: fixed url("../img/874542.jpg"); background-size: cover;
     background-size: cover;
 
     
@@ -31,8 +31,7 @@ backdrop-filter: blur(10px);
  background-color: rgba(240, 248, 255, 0);
 }
 .carousel{
-    margin-left: 18%;
-    margin-top: 3%;
+   
     height: 650px;
     width: 1200px;
 }
@@ -42,10 +41,17 @@ backdrop-filter: blur(10px);
 }
 .titulo{
     font-family:halloween;
+    color: rgb(254, 69, 1);
 }
 .fff{
-    font-size: 5rem;
+    font-size: 10rem;
+    margin-left: 15px;
+}
+.titulo1{
+    font-family:halloween;
+    font-size: 1.8rem;
 }
 .boton{
-
+    font-family:halloween;
+border-radius: 10px;
 }
