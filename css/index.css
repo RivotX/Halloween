@@ -5,7 +5,7 @@
 body{
 
     
-    background: fixed url("../img/potion-2217630.jpg"); background-size: cover;
+    background: fixed url("../img/874542.jpg"); background-size: cover;
     background-size: cover;
 
     
@@ -42,10 +42,16 @@ backdrop-filter: blur(10px);
 }
 .titulo{
     font-family:halloween;
+    color: rgb(254, 69, 1);
 }
 .fff{
-    font-size: 5rem;
+    font-size: 10rem;
+    margin-left: 15px;
+}
+.titulo1{
+    font-family:halloween;
+    font-size: 1.8rem;
 }
 .boton{
-
+    font-family:halloween;
 }
