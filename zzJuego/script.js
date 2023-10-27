@@ -294,7 +294,7 @@ window.addEventListener('keydown', function (event) {
         case "l":
             var tiempoActual = Date.now(); // Obtiene el tiempo actual
             if (arquero.position.x >= daga.position.x) {
-                if (tiempoActual - ultimaVezDisparoFlecha >= 1100) {
+                if (tiempoActual - ultimaVezDisparoFlecha >= 800) {
                     ultimaVezDisparoFlecha = tiempoActual;  // Actualiza el tiempo del último disparo
                     console.log("disparo");
                     keys.l.presionada = true;
@@ -306,7 +306,7 @@ window.addEventListener('keydown', function (event) {
                             y: arquero.position.y + arquero.height / 2,
                         },
                         velocidad: {
-                            x: -25,
+                            x: -18,
                             y: 0,
                         },
                         height: 10,
@@ -318,7 +318,7 @@ window.addEventListener('keydown', function (event) {
                     // Agrega la nueva flecha al array
                 }
             } else {
-                if (tiempoActual - ultimaVezDisparoFlecha >= 1100) {
+                if (tiempoActual - ultimaVezDisparoFlecha >= 800) {
                     ultimaVezDisparoFlecha = tiempoActual;  // Actualiza el tiempo del último disparo
                     console.log("disparo");
                     keys.l.presionada = true;
@@ -330,7 +330,7 @@ window.addEventListener('keydown', function (event) {
                             y: arquero.position.y + arquero.height / 2,
                         },
                         velocidad: {
-                            x: 25,
+                            x: 18,
                             y: 0,
                         },
                         height: 10,
