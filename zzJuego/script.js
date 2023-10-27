@@ -10,7 +10,7 @@ c.fillRect(0, 0, canvas.width, canvas.height); //fillRect(x: number, y: number, 
 
 // ------------- lo weno ------------//
 
-const gravedad = 0.7; // literalmente 0.7px de gravedad para añadirla a la velocidad.y
+const gravedad = 1; // literalmente 1px de gravedad para añadirla a la velocidad.y
 
 class Sprite {
     constructor({ position, velocidad, height, width, color, hp }) { // paso parametros con objetos en vez de con muchas propiedades distintas, mas sencillo
@@ -172,10 +172,10 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
         daga.velocidad.x = -2
     }
     if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
-        daga.velocidad.y = -15;
+        daga.velocidad.y = -20;
 
     } else if (daga.velocidad.y > 0 && keys.s.presionada == true && daga.UltimaTeclaVertical === "s") {
-        daga.velocidad.y = daga.velocidad.y = 15;
+        daga.velocidad.y = daga.velocidad.y = 20;
     }
 
     // Movilidad de arquero
@@ -185,10 +185,10 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
         arquero.velocidad.x = -2
     }
     if (arquero.position.y + arquero.height + arquero.velocidad.y >= canvas.height && keys.ArrowUp.presionada == true && arquero.UltimaTeclaVertical === "ArrowUp") {
-        arquero.velocidad.y = -15;
+        arquero.velocidad.y = -20;
 
     } else if (arquero.velocidad.y > 0 && keys.ArrowDown.presionada == true && arquero.UltimaTeclaVertical === "ArrowDown") {
-        arquero.velocidad.y = arquero.velocidad.y = 15;
+        arquero.velocidad.y = arquero.velocidad.y = 20;
     }
     //chatgpt (no lo sacaba) -- UPDATE DE LAS FLECHAS
     // Actualiza y muestra todas las flechas
