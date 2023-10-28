@@ -367,7 +367,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
             i--;
 
             if (daga.hp <= 0) {
-                window.location.href = '../ZZjuego/finales/GanaMago.html';
+                window.location.href = '../zzJuego/finales/GanaMago.html';
             }
         }
     }
