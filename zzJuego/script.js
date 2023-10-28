@@ -607,13 +607,15 @@ function cambiarPosiciones(jugador1, jugador2) {
 setTimeout(function () {
     cambiarPosiciones(daga, mago);
     console.log('cambio');
-}, 5500);
+}, (Math.floor(Math.random() * 3000) + 1)
+);
 
 
 setTimeout(function () {
     cambiarPosiciones(daga, mago);
     console.log('cambio');
-}, 10000);
+}, (Math.floor(Math.random() * 8000) + 1)
+);
 
 
 animate();
