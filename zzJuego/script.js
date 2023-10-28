@@ -133,6 +133,7 @@ class Flecha {
         this.color = color;
         this.isAttacking = false; // Indica si la flecha está en vuelo
         this.flechaDisparada = false;
+
     }
 
     pintar() {
@@ -162,7 +163,7 @@ class Flecha {
 const daga = new Luchador({
     position: {
         x: 0,
-        y: 100
+        y: 0
     },
     velocidad: {
         x: 0,
@@ -196,7 +197,7 @@ const mago = new Luchador({
     width: 50,
     color: 'blue',
     hp: 1,
-    imagenSrc: "../zzJuego/img/MagoQuieto.png",
+    imagenSrc: "../zzJuego/img/MagoQuietoIzq.png",
     framesMax: 8,
     scale: 3.2,
     offset: {
@@ -335,6 +336,19 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
             }
         }
     }
+    //cambio de imagen para que siempre se esten mirando
+    if (mago.position.x < daga.position.x) {
+        mago.imagen.src = "../zzJuego/img/MagoQuieto.png";
+    } else {
+        mago.imagen.src = "../zzJuego/img/MagoQuietoIzq.png";
+    }
+
+    if (daga.position.x < mago.position.x) {
+        daga.imagen.src = "../zzJuego/img/dagaQuieto.png";
+    } else {
+        daga.imagen.src = "../zzJuego/img/dagaQuietoIzq.png";
+    }
+
 }
 // ----------------movilidad ---------------//
 const keys = {
@@ -547,5 +561,7 @@ function cambiarPosiciones(jugador1, jugador2) {
 //     console.log('cambio');
 // }, 10000);
 
+setTimeout(function () { console.log("y Daga:", daga.position.y + daga.height); }, 3000)
+console.log("y flecha:", flecha.position.y + flecha.height);
 
 animate();
