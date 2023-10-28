@@ -121,7 +121,7 @@ class Luchador extends Sprite {
         this.isAttacking = true;
         setTimeout(() => {
             this.isAttacking = false;
-        }, 100);
+        }, 350);
     }
 
 }
@@ -181,8 +181,8 @@ const daga = new Luchador({
     width: 50,
     color: 'red',
     hp: 3,
-    imagenSrc: "../zzJuego/img/dagaQuieto.png",
-    framesMax: 10,
+    imagenSrc: "../zzJuego/img/dagaQuieto2.png",
+    framesMax: 7,
     scale: 3.2,
     offset: {
         x: 240,
@@ -190,8 +190,8 @@ const daga = new Luchador({
     },
     sprites: {
         quieto: {
-            imagenSrc: "../zzJuego/img/dagaQuieto.png",
-            framesMax: 10,
+            imagenSrc: "../zzJuego/img/dagaQuieto2.png",
+            framesMax: 7,
         },
         quietoInv: {
             imagenSrc: "../zzJuego/img/dagaQuietoIzq.png",
@@ -348,7 +348,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
         console.log(mago.hp);
     }
 
-  
+
 
     //colision flechas
     for (let i = 0; i < flechas.length; i++) {
@@ -371,18 +371,20 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
             }
         }
     }
-    // cambio de imagen para que siempre se esten mirando
-    // if (mago.position.x < daga.position.x) {
-    //     mago.imagen = mago.sprites.quietoInv.imagen;
-    // } else {
-    //     mago.imagen = mago.sprites.quieto.imagen;
-    // }
+    //cambio de imagen para que siempre se esten mirando
+    if (mago.position.x < daga.position.x) {
+        mago.imagen = mago.sprites.quietoInv.imagen;
+    } else {
+        mago.imagen = mago.sprites.quieto.imagen;
+    }
 
-    // if (daga.position.x < mago.position.x) {
-    //     daga.imagen = daga.sprites.quieto.imagen;
-    // } else {
-    //     daga.imagen = daga.sprites.quietoInv.imagen;
-    // }
+    if (!daga.isAttacking) {
+        if (daga.position.x < mago.position.x) {
+            daga.imagen = daga.sprites.quieto.imagen;
+        } else {
+            daga.imagen = daga.sprites.quietoInv.imagen;
+        }
+    }
 
 }
 // ----------------movilidad ---------------//
@@ -424,6 +426,7 @@ const keys = {
 
 
 let ultimaVezDisparoFlecha = 0;
+let ultimoataque = 0;
 
 contador = 0;
 
@@ -446,33 +449,24 @@ window.addEventListener('keydown', function (event) {
             daga.UltimaTeclaVertical = "s";
             break;
         case "g":
-            daga.isAttacking = true;
-            keys.g.presionada = true;
-            if (daga.isAttacking) {
-                daga.isAttacking = true;
+            var tiempoActual2 = Date.now(); // Obtiene el tiempo actual
+            if (tiempoActual2 - ultimoataque >= 800) {
+                ultimoataque = tiempoActual2;  // Actualiza el tiempo del último disparo
+
+                keys.g.presionada = true;
                 daga.ataque();
+                daga.isAttacking = true;
                 daga.imagen = daga.sprites.ataque1.imagen;
-                daga.framesMax = daga.sprites.ataque1.framesMax
-                this.setTimeout(function () {
+                daga.framesMax = daga.sprites.ataque1.framesMax;
+
+                setTimeout(function () {
                     daga.isAttacking = false;
-                    daga.framesMax = daga.sprites.quieto.framesMax
-                    daga.imagen = daga.sprites.quieto.imagen
-                }, 400);
+                    daga.framesMax = daga.sprites.quieto.framesMax;
+                    daga.imagen = (daga.position.x < mago.position.x) ? daga.sprites.quietoInv.imagen : daga.sprites.quieto.imagen;
+                }, 350); // Cambié 350 a 400 para que coincida con el tiempo del ataque
             }
-
-            // daga.isAttacking = true;
-            // console.log('daga.isAttacking :>> ', daga.isAttacking);
-            // if (daga.isAttacking) {
-            //     daga.imagen = daga.sprites.ataque1.imagen;
-            // } else {
-            //     daga.imagen = daga.sprites.quieto.imagen;
-            // }
-            // setTimeout(() => {
-            //     daga.imagen = daga.sprites.quieto.imagen;
-            //     daga.offset.y = 0;
-            // }, 200);
-
             break;
+
         case "l":
             var tiempoActual = Date.now(); // Obtiene el tiempo actual
             if (mago.position.x >= daga.position.x) {
@@ -499,13 +493,7 @@ window.addEventListener('keydown', function (event) {
                     });
                     nuevaFlecha.disparar(mago.position.x + mago.width, mago.position.y + mago.height / 2);
                     flechas.push(nuevaFlecha);
-                    // Agrega la nueva flecha al array
-                    // mago.imagen = mago.sprites.ataque.imagen;
-                    // mago.offset.y = 296;
-                    // setTimeout(() => {
-                    //     mago.imagen = mago.sprites.quieto.imagen;
-                    //     mago.offset.y = 177;
-                    // }, 250);
+
                 }
             } else {
                 if (tiempoActual - ultimaVezDisparoFlecha >= 800) {
@@ -531,13 +519,7 @@ window.addEventListener('keydown', function (event) {
                     });
                     nuevaFlecha.disparar(mago.position.x + mago.width, mago.position.y + mago.height / 2);
                     flechas.push(nuevaFlecha);
-                    // Agrega la nueva flecha al array
-                    // mago.imagen = mago.sprites.ataque.imagen;
-                    // mago.offset.y = 296;
-                    // setTimeout(() => {
-                    //     mago.imagen = mago.sprites.quietoInv.imagen;
-                    //     mago.offset.y = 177;
-                    // }, 290);
+
                 }
             }
             break;
@@ -568,15 +550,8 @@ window.addEventListener('keydown', function (event) {
                 this.setTimeout(function () {
                     daga.siendoEmpujado = false;
                     mago.habilidadUsada = true;
-                }, 400);
+                }, 350);
             }
-
-        // if (!arquero.empuje) {
-        //     arquero.empuje = true;
-        //     console.log("empuje");
-        //     keys.a.presionada = true;
-        //     daga.velocidad.x = -10;
-        // }
     }
 })
 window.addEventListener('keyup', function (event) {
@@ -612,7 +587,6 @@ window.addEventListener('keyup', function (event) {
             keys.k.presionada = false;
             break;
         case "g":
-            daga.isAttacking = false;
             keys.g.presionada = false;
             break;
     }
@@ -630,16 +604,16 @@ function cambiarPosiciones(jugador1, jugador2) {
 
 
 
-// setTimeout(function () {
-//     cambiarPosiciones(daga, mago);
-//     console.log('cambio');
-// }, 5500);
+setTimeout(function () {
+    cambiarPosiciones(daga, mago);
+    console.log('cambio');
+}, 5500);
 
 
-// setTimeout(function () {
-//     cambiarPosiciones(daga, mago);
-//     console.log('cambio');
-// }, 10000);
+setTimeout(function () {
+    cambiarPosiciones(daga, mago);
+    console.log('cambio');
+}, 10000);
 
 
 animate();
