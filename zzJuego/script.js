@@ -67,7 +67,7 @@ class Luchador extends Sprite {
                 x: this.position.x - this.width / 2,
                 y: this.position.y
             },
-            width: 150,
+            width: 250,
             height: 30
         }
         this.empuje = false;
@@ -113,7 +113,7 @@ class Luchador extends Sprite {
         this.position.x += this.velocidad.x; // Actualiza la posición x
 
         // Actualiza la posición de la hitbox junto con la posición del jugador
-        this.ataqueHitbox.position.x = this.position.x - this.width; //(width hitbox = 150, width daga = 50, empieza en la posición 50 asi que sobresalen 50 por cada lado (150/3))
+        this.ataqueHitbox.position.x = this.position.x - 100; //(width hitbox = 250, width daga = 50, sale 100 a cada lado)
         this.ataqueHitbox.position.y = this.position.y;
     }
 
@@ -198,13 +198,9 @@ const daga = new Luchador({
             framesMax: 10,
         },
         ataque1: {
-            imagenSrc: "../zzJuego/img/Attack3.png",
+            imagenSrc: "../zzJuego/img/dagaAtaque1.png",
             framesMax: 7,
         },
-        ataque2: {
-            imagenSrc: "../zzJuego/img/dagaAtaque2.png",
-            framesMax: 7,
-        }
     }
 });
 daga.pintar();
@@ -346,15 +342,13 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
         daga.isAttacking = false;
         mago.hp -= 1;
         if (mago.hp <= 0) {
-            //alert("gana daga")
+            window.location.href = '../zzJuego/finales/DagaGana.html';
+
         }
         console.log(mago.hp);
     }
 
-    if (mago.hp == 0) {
-        mago.hp = -1;
-        console.log('mago.hp :>> ', mago.hp);
-    }
+  
 
     //colision flechas
     for (let i = 0; i < flechas.length; i++) {
@@ -373,7 +367,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
             i--;
 
             if (daga.hp <= 0) {
-                //alert("gana mago");
+                window.location.href = '../ZZjuego/finales/GanaMago.html';
             }
         }
     }
@@ -452,15 +446,27 @@ window.addEventListener('keydown', function (event) {
             daga.UltimaTeclaVertical = "s";
             break;
         case "g":
-        keys.g.presionada = true;
-            daga.ataque();
             daga.isAttacking = true;
-            console.log('daga.isAttacking :>> ', daga.isAttacking);
+            keys.g.presionada = true;
             if (daga.isAttacking) {
+                daga.isAttacking = true;
+                daga.ataque();
                 daga.imagen = daga.sprites.ataque1.imagen;
-            } else {
-                daga.imagen = daga.sprites.quieto.imagen;
+                daga.framesMax = daga.sprites.ataque1.framesMax
+                this.setTimeout(function () {
+                    daga.isAttacking = false;
+                    daga.framesMax = daga.sprites.quieto.framesMax
+                    daga.imagen = daga.sprites.quieto.imagen
+                }, 400);
             }
+
+            // daga.isAttacking = true;
+            // console.log('daga.isAttacking :>> ', daga.isAttacking);
+            // if (daga.isAttacking) {
+            //     daga.imagen = daga.sprites.ataque1.imagen;
+            // } else {
+            //     daga.imagen = daga.sprites.quieto.imagen;
+            // }
             // setTimeout(() => {
             //     daga.imagen = daga.sprites.quieto.imagen;
             //     daga.offset.y = 0;
@@ -637,3 +643,15 @@ function cambiarPosiciones(jugador1, jugador2) {
 
 
 animate();
+
+function DagaGanaFinal() {
+    window.location.href = '../juego.html';
+}
+function MagoGanaFinal() {
+    window.location.href = '../juego.html';
+}
+
+function explicacion() {
+    window.location.href = '../ZZjuego/juego.html';
+
+}
