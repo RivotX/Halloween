@@ -626,6 +626,6 @@ function MagoGanaFinal() {
 }
 
 function explicacion() {
-    window.location.href = '../ZZjuego/juego.html';
+    window.location.href = '../zzJuego/juego.html';
 
 }
