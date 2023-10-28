@@ -54,7 +54,7 @@ class Sprite {
     }
 }
 class Luchador extends Sprite {
-    constructor({ position, velocidad, height, width, color, hp, imagenSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 } }) {
+    constructor({ position, velocidad, height, width, color, hp, imagenSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 }, sprites }) {
         super({ position, imagenSrc, scale, framesMax, offset });
         this.position = position;
         this.velocidad = velocidad;
@@ -80,12 +80,15 @@ class Luchador extends Sprite {
         this.framesCurrent = 0;
         this.framesTranscurridos = 0;
         this.framesHold = 5;
-
-        // Cargar la imagen y esperar a que esté completamente cargada
-        this.imagen.onload = () => {
-            this.loaded = true;
-        };
         this.imagen.src = imagenSrc;
+        this.sprites = sprites;
+
+        for (const sprite in this.sprites) {
+            sprites[sprite].imagen = new Image();
+            sprites[sprite].imagen.src = sprites[sprite].imagenSrc;
+
+        }
+        console.log(this.sprites);
     }
 
     update() {
@@ -101,7 +104,7 @@ class Luchador extends Sprite {
         }
 
         // si el jugador está en el suelo, para de bajar (velocidad.y=0), si no, le afecta la gravedad (+0.7/cada animate)
-        if (this.position.y + this.height + this.velocidad.y >= canvas.height - 150) {
+        if (this.position.y + this.height + this.velocidad.y >= canvas.height - 75) {
             this.velocidad.y = 0;
         } else {
             this.velocidad.y += gravedad;
@@ -125,7 +128,7 @@ class Luchador extends Sprite {
 
 //clase flecha
 class Flecha {
-    constructor({ position, velocidad, height, width, color }) {
+    constructor({ position, velocidad, height, width, color, imagenSrc }) {
         this.position = position;
         this.velocidad = velocidad;
         this.width = width;
@@ -133,12 +136,17 @@ class Flecha {
         this.color = color;
         this.isAttacking = false; // Indica si la flecha está en vuelo
         this.flechaDisparada = false;
-
+        this.imagen = new Image();
+        this.imagen.src = imagenSrc;
     }
 
     pintar() {
-        c.fillStyle = this.color;
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
+        if (this.isAttacking) {
+            c.drawImage(this.imagen, this.position.x, this.position.y, this.width, this.height);
+        } else {
+            c.fillStyle = this.color;
+            c.fillRect(this.position.x, this.position.y, this.width, this.height);
+        }
     }
 
     update() {
@@ -178,9 +186,26 @@ const daga = new Luchador({
     scale: 3.2,
     offset: {
         x: 240,
-        y: 100
+        y: 0
+    },
+    sprites: {
+        quieto: {
+            imagenSrc: "../zzJuego/img/dagaQuieto.png",
+            framesMax: 10,
+        },
+        quietoInv: {
+            imagenSrc: "../zzJuego/img/dagaQuietoIzq.png",
+            framesMax: 10,
+        },
+        ataque1: {
+            imagenSrc: "../zzJuego/img/Attack3.png",
+            framesMax: 7,
+        },
+        ataque2: {
+            imagenSrc: "../zzJuego/img/dagaAtaque2.png",
+            framesMax: 7,
+        }
     }
-
 });
 daga.pintar();
 
@@ -202,7 +227,21 @@ const mago = new Luchador({
     scale: 3.2,
     offset: {
         x: 380,
-        y: 310
+        y: 177
+    },
+    sprites: {
+        quieto: {
+            imagenSrc: "../zzJuego/img/MagoQuietoIzq.png",
+            framesMax: 10,
+        },
+        quietoInv: {
+            imagenSrc: "../zzJuego/img/MagoQuieto.png",
+            framesMax: 10,
+        },
+        ataque: {
+            imagenSrc: "../zzJuego/img/MagoAtaque.png",
+            framesMax: 8,
+        },
     }
 });
 mago.pintar();
@@ -219,6 +258,8 @@ const flecha = new Flecha({
     height: 10,
     width: 30,
     color: 'yellow',
+    imagenSrc: "../zzJuego/img/fireball.png",
+
 });
 flecha.pintar();
 const flechas = [];
@@ -266,20 +307,20 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     }
 
 
-    if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height - 150 && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
+    if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height - 75 && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
         daga.velocidad.y = -20;
 
     } else if (daga.velocidad.y > 0 && keys.s.presionada == true && daga.UltimaTeclaVertical === "s") {
         daga.velocidad.y = daga.velocidad.y = 20;
     }
 
-    // Movilidad de arquero
+    // Movilidad de MAGO
     if ((keys.ArrowRight.presionada && mago.UltimaTeclaHorizontal === "ArrowRight" && mago.position.x + mago.width < canvas.width)) {
         mago.velocidad.x = 3;
     } else if (keys.ArrowLeft.presionada && mago.UltimaTeclaHorizontal === "ArrowLeft" && mago.position.x > 0) {
-        mago.velocidad.x = -3
+        mago.velocidad.x = -3;
     }
-    if (mago.position.y + mago.height + mago.velocidad.y >= canvas.height - 150 && keys.ArrowUp.presionada == true && mago.UltimaTeclaVertical === "ArrowUp") {
+    if (mago.position.y + mago.height + mago.velocidad.y >= canvas.height - 75 && keys.ArrowUp.presionada == true && mago.UltimaTeclaVertical === "ArrowUp") {
         mago.velocidad.y = -20;
 
     } else if (mago.velocidad.y > 0 && keys.ArrowDown.presionada == true && mago.UltimaTeclaVertical === "ArrowDown") {
@@ -336,18 +377,18 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
             }
         }
     }
-    //cambio de imagen para que siempre se esten mirando
-    if (mago.position.x < daga.position.x) {
-        mago.imagen.src = "../zzJuego/img/MagoQuieto.png";
-    } else {
-        mago.imagen.src = "../zzJuego/img/MagoQuietoIzq.png";
-    }
+    // cambio de imagen para que siempre se esten mirando
+    // if (mago.position.x < daga.position.x) {
+    //     mago.imagen = mago.sprites.quietoInv.imagen;
+    // } else {
+    //     mago.imagen = mago.sprites.quieto.imagen;
+    // }
 
-    if (daga.position.x < mago.position.x) {
-        daga.imagen.src = "../zzJuego/img/dagaQuieto.png";
-    } else {
-        daga.imagen.src = "../zzJuego/img/dagaQuietoIzq.png";
-    }
+    // if (daga.position.x < mago.position.x) {
+    //     daga.imagen = daga.sprites.quieto.imagen;
+    // } else {
+    //     daga.imagen = daga.sprites.quietoInv.imagen;
+    // }
 
 }
 // ----------------movilidad ---------------//
@@ -382,7 +423,7 @@ const keys = {
     k: {
         presionada: false
     },
-    f: {
+    g: {
         presionada: false
     }
 }
@@ -411,7 +452,20 @@ window.addEventListener('keydown', function (event) {
             daga.UltimaTeclaVertical = "s";
             break;
         case "g":
+        keys.g.presionada = true;
             daga.ataque();
+            daga.isAttacking = true;
+            console.log('daga.isAttacking :>> ', daga.isAttacking);
+            if (daga.isAttacking) {
+                daga.imagen = daga.sprites.ataque1.imagen;
+            } else {
+                daga.imagen = daga.sprites.quieto.imagen;
+            }
+            // setTimeout(() => {
+            //     daga.imagen = daga.sprites.quieto.imagen;
+            //     daga.offset.y = 0;
+            // }, 200);
+
             break;
         case "l":
             var tiempoActual = Date.now(); // Obtiene el tiempo actual
@@ -431,13 +485,21 @@ window.addEventListener('keydown', function (event) {
                             x: -18,
                             y: 0,
                         },
-                        height: 10,
-                        width: 30,
+                        height: 40,
+                        width: 40,
                         color: 'yellow',
+                        imagenSrc: "../zzJuego/img/fireball.png",
+
                     });
                     nuevaFlecha.disparar(mago.position.x + mago.width, mago.position.y + mago.height / 2);
                     flechas.push(nuevaFlecha);
                     // Agrega la nueva flecha al array
+                    // mago.imagen = mago.sprites.ataque.imagen;
+                    // mago.offset.y = 296;
+                    // setTimeout(() => {
+                    //     mago.imagen = mago.sprites.quieto.imagen;
+                    //     mago.offset.y = 177;
+                    // }, 250);
                 }
             } else {
                 if (tiempoActual - ultimaVezDisparoFlecha >= 800) {
@@ -455,13 +517,21 @@ window.addEventListener('keydown', function (event) {
                             x: 18,
                             y: 0,
                         },
-                        height: 10,
-                        width: 30,
+                        height: 40,
+                        width: 40,
                         color: 'yellow',
+                        imagenSrc: "../zzJuego/img/fireball.png",
+
                     });
                     nuevaFlecha.disparar(mago.position.x + mago.width, mago.position.y + mago.height / 2);
                     flechas.push(nuevaFlecha);
                     // Agrega la nueva flecha al array
+                    // mago.imagen = mago.sprites.ataque.imagen;
+                    // mago.offset.y = 296;
+                    // setTimeout(() => {
+                    //     mago.imagen = mago.sprites.quietoInv.imagen;
+                    //     mago.offset.y = 177;
+                    // }, 290);
                 }
             }
             break;
@@ -535,6 +605,10 @@ window.addEventListener('keyup', function (event) {
         case "k":
             keys.k.presionada = false;
             break;
+        case "g":
+            daga.isAttacking = false;
+            keys.g.presionada = false;
+            break;
     }
 })
 
@@ -561,7 +635,5 @@ function cambiarPosiciones(jugador1, jugador2) {
 //     console.log('cambio');
 // }, 10000);
 
-setTimeout(function () { console.log("y Daga:", daga.position.y + daga.height); }, 3000)
-console.log("y flecha:", flecha.position.y + flecha.height);
 
 animate();
