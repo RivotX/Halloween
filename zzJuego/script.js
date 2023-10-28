@@ -12,8 +12,50 @@ c.fillRect(0, 0, canvas.width, canvas.height); //fillRect(x: number, y: number, 
 
 const gravedad = 1; // literalmente 1px de gravedad para añadirla a la velocidad.y
 
+//clase Sprite 
 class Sprite {
-    constructor({ position, velocidad, height, width, color, hp }) { // paso parametros con objetos en vez de con muchas propiedades distintas, mas sencillo
+    constructor({ position, imagenSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 } }) { // paso parametros con objetos en vez de con muchas propiedades distintas, mas sencillo
+        this.position = position;
+        this.imagen = new Image();
+        this.imagen.src = imagenSrc;
+        this.scale = scale;
+        this.framesMax = framesMax;
+        this.framesCurrent = 0;
+        this.framesTranscurridos = 0;
+        this.framesHold = 5;
+        this.offset = offset;
+    }
+    pintar() {
+        c.drawImage(
+            this.imagen,
+            this.framesCurrent * (this.imagen.width / this.framesMax),
+            0,
+            this.imagen.width / this.framesMax,
+            this.imagen.height,
+            this.position.x - this.offset.x,
+            this.position.y - this.offset.y,
+            (this.imagen.width / this.framesMax) * this.scale,
+            this.imagen.height * this.scale
+        )
+    }
+
+    update() {
+        this.pintar();
+        this.framesTranscurridos++;
+
+        if (this.framesTranscurridos % this.framesHold === 0) {
+            if (this.framesCurrent < this.framesMax - 1) {
+                this.framesCurrent++;
+            } else {
+                this.framesCurrent = 0;
+            }
+
+        }
+    }
+}
+class Luchador extends Sprite {
+    constructor({ position, velocidad, height, width, color, hp, imagenSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 } }) {
+        super({ position, imagenSrc, scale, framesMax, offset });
         this.position = position;
         this.velocidad = velocidad;
         this.width = width;
@@ -22,7 +64,7 @@ class Sprite {
         this.UltimaTeclaVertical;
         this.ataqueHitbox = {
             position: {
-                x: this.position.x - this.width / 2, // Posición x centrada
+                x: this.position.x - this.width / 2,
                 y: this.position.y
             },
             width: 150,
@@ -34,22 +76,32 @@ class Sprite {
         this.hp = hp;
         this.siendoEmpujado = false;
         this.habilidadUsada = false;
-    }
-    pintar() {
-        c.fillStyle = this.color;
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
 
-        //hitbox ataque
-        if (this.isAttacking == true) {
-            c.fillStyle = "green";
-            c.fillRect(this.ataqueHitbox.position.x, this.ataqueHitbox.position.y, this.ataqueHitbox.width, this.ataqueHitbox.height);
-        }
+        this.framesCurrent = 0;
+        this.framesTranscurridos = 0;
+        this.framesHold = 5;
+
+        // Cargar la imagen y esperar a que esté completamente cargada
+        this.imagen.onload = () => {
+            this.loaded = true;
+        };
+        this.imagen.src = imagenSrc;
     }
+
     update() {
         this.pintar();
+        this.framesTranscurridos++;
+
+        if (this.framesTranscurridos % this.framesHold === 0) {
+            if (this.framesCurrent < this.framesMax - 1) {
+                this.framesCurrent++;
+            } else {
+                this.framesCurrent = 0;
+            }
+        }
 
         // si el jugador está en el suelo, para de bajar (velocidad.y=0), si no, le afecta la gravedad (+0.7/cada animate)
-        if (this.position.y + this.height + this.velocidad.y >= canvas.height) {
+        if (this.position.y + this.height + this.velocidad.y >= canvas.height - 150) {
             this.velocidad.y = 0;
         } else {
             this.velocidad.y += gravedad;
@@ -107,25 +159,31 @@ class Flecha {
     }
 }
 
-
-
-const daga = new Sprite({
+const daga = new Luchador({
     position: {
         x: 0,
-        y: 0
+        y: 100
     },
     velocidad: {
         x: 0,
         y: 0
     },
-    height: 90,
+    height: 150,
     width: 50,
     color: 'red',
-    hp: 3
+    hp: 3,
+    imagenSrc: "../zzJuego/img/dagaQuieto.png",
+    framesMax: 10,
+    scale: 3.2,
+    offset: {
+        x: 240,
+        y: 100
+    }
+
 });
 daga.pintar();
 
-const arquero = new Sprite({
+const mago = new Luchador({
     position: {
         x: 1350,
         y: 0
@@ -134,17 +192,24 @@ const arquero = new Sprite({
         x: 0,
         y: 0
     },
-    height: 90,
+    height: 150,
     width: 50,
     color: 'blue',
-    hp: 1
+    hp: 1,
+    imagenSrc: "../zzJuego/img/MagoQuieto.png",
+    framesMax: 8,
+    scale: 3.2,
+    offset: {
+        x: 380,
+        y: 310
+    }
 });
-arquero.pintar();
+mago.pintar();
 
 const flecha = new Flecha({
     position: {
-        x: arquero.position.x,
-        y: arquero.position.y + arquero.height,
+        x: mago.position.x,
+        y: mago.position.y + mago.height,
     },
     velocidad: {
         x: -6,
@@ -155,27 +220,39 @@ const flecha = new Flecha({
     color: 'yellow',
 });
 flecha.pintar();
-
 const flechas = [];
+
+const fondo = new Sprite({
+    position: {
+        x: 0,
+        y: 0,
+    },
+    imagenSrc: "../zzJuego/img/fondo.gif"
+});
+
+function animateLuchador(luchador) {
+    // Actualiza y pinta el luchador dado
+    luchador.update();
+}
 function animate() { //esta funcion se esta llamando a si misma, es infinita hasta que acabe el juego (bastantes fps)
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black';
     c.fillRect(0, 0, canvas.width, canvas.height); //pinta el fondo negro
-    daga.update();
-    arquero.update();
+    fondo.update();
+    animateLuchador(daga);
+    animateLuchador(mago);
 
     daga.velocidad.x = 0;
-    arquero.velocidad.x = 0;
+    mago.velocidad.x = 0;
 
-    if (daga.position.x < arquero.position.x) {
-        if (daga.siendoEmpujado && !arquero.habilidadUsada && daga.position.x > 0) {
-            daga.velocidad.x = -20
+    if (daga.position.x < mago.position.x) {
+        if (daga.siendoEmpujado && !mago.habilidadUsada && daga.position.x > 0) {
+            daga.velocidad.x = -18
         }
     }
     else {
-        if (daga.siendoEmpujado && !arquero.habilidadUsada && daga.position.x + daga.width < canvas.width) {
-            daga.velocidad.x = 20
-
+        if (daga.siendoEmpujado && !mago.habilidadUsada && daga.position.x + daga.width < canvas.width) {
+            daga.velocidad.x = 18
         }
     }
     // Movilidad de daga
@@ -188,7 +265,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     }
 
 
-    if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
+    if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height - 150 && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
         daga.velocidad.y = -20;
 
     } else if (daga.velocidad.y > 0 && keys.s.presionada == true && daga.UltimaTeclaVertical === "s") {
@@ -196,16 +273,16 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     }
 
     // Movilidad de arquero
-    if (keys.ArrowRight.presionada == true && arquero.UltimaTeclaHorizontal === "ArrowRight") {
-        arquero.velocidad.x = 3;
-    } else if (keys.ArrowLeft.presionada == true && arquero.UltimaTeclaHorizontal === "ArrowLeft") {
-        arquero.velocidad.x = -3
+    if ((keys.ArrowRight.presionada && mago.UltimaTeclaHorizontal === "ArrowRight" && mago.position.x + mago.width < canvas.width)) {
+        mago.velocidad.x = 3;
+    } else if (keys.ArrowLeft.presionada && mago.UltimaTeclaHorizontal === "ArrowLeft" && mago.position.x > 0) {
+        mago.velocidad.x = -3
     }
-    if (arquero.position.y + arquero.height + arquero.velocidad.y >= canvas.height && keys.ArrowUp.presionada == true && arquero.UltimaTeclaVertical === "ArrowUp") {
-        arquero.velocidad.y = -20;
+    if (mago.position.y + mago.height + mago.velocidad.y >= canvas.height - 150 && keys.ArrowUp.presionada == true && mago.UltimaTeclaVertical === "ArrowUp") {
+        mago.velocidad.y = -20;
 
-    } else if (arquero.velocidad.y > 0 && keys.ArrowDown.presionada == true && arquero.UltimaTeclaVertical === "ArrowDown") {
-        arquero.velocidad.y = arquero.velocidad.y = 20;
+    } else if (mago.velocidad.y > 0 && keys.ArrowDown.presionada == true && mago.UltimaTeclaVertical === "ArrowDown") {
+        mago.velocidad.y = mago.velocidad.y = 20;
     }
     //chatgpt (no lo sacaba) -- UPDATE DE LAS FLECHAS
     // Actualiza y muestra todas las flechas
@@ -218,23 +295,23 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
         }
     }
     // detectar colision
-    if (daga.ataqueHitbox.position.x + daga.ataqueHitbox.width >= arquero.position.x
-        && daga.ataqueHitbox.position.x <= arquero.position.x + arquero.width
-        && daga.ataqueHitbox.position.y + daga.ataqueHitbox.height >= arquero.position.y
-        && daga.ataqueHitbox.position.y <= arquero.position.y + arquero.height
+    if (daga.ataqueHitbox.position.x + daga.ataqueHitbox.width >= mago.position.x
+        && daga.ataqueHitbox.position.x <= mago.position.x + mago.width
+        && daga.ataqueHitbox.position.y + daga.ataqueHitbox.height >= mago.position.y
+        && daga.ataqueHitbox.position.y <= mago.position.y + mago.height
         && daga.isAttacking) {
 
         daga.isAttacking = false;
-        arquero.hp -= 1;
-        if (arquero.hp <= 0) {
-            alert("gana daga")
+        mago.hp -= 1;
+        if (mago.hp <= 0) {
+            //alert("gana daga")
         }
-        console.log(arquero.hp);
+        console.log(mago.hp);
     }
 
-    if (arquero.hp == 0) {
-        arquero.hp = -1;
-        console.log('arquero.hp :>> ', arquero.hp);
+    if (mago.hp == 0) {
+        mago.hp = -1;
+        console.log('mago.hp :>> ', mago.hp);
     }
 
     //colision flechas
@@ -254,7 +331,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
             i--;
 
             if (daga.hp <= 0) {
-                alert("gana arquero");
+                //alert("gana mago");
             }
         }
     }
@@ -324,7 +401,7 @@ window.addEventListener('keydown', function (event) {
             break;
         case "l":
             var tiempoActual = Date.now(); // Obtiene el tiempo actual
-            if (arquero.position.x >= daga.position.x) {
+            if (mago.position.x >= daga.position.x) {
                 if (tiempoActual - ultimaVezDisparoFlecha >= 700) {
                     ultimaVezDisparoFlecha = tiempoActual;  // Actualiza el tiempo del último disparo
                     console.log("disparo");
@@ -333,8 +410,8 @@ window.addEventListener('keydown', function (event) {
                     console.log('l');
                     const nuevaFlecha = new Flecha({
                         position: {
-                            x: arquero.position.x + arquero.width,
-                            y: arquero.position.y + arquero.height / 2,
+                            x: mago.position.x + mago.width,
+                            y: mago.position.y + mago.height / 2,
                         },
                         velocidad: {
                             x: -18,
@@ -344,7 +421,7 @@ window.addEventListener('keydown', function (event) {
                         width: 30,
                         color: 'yellow',
                     });
-                    nuevaFlecha.disparar(arquero.position.x + arquero.width, arquero.position.y + arquero.height / 2);
+                    nuevaFlecha.disparar(mago.position.x + mago.width, mago.position.y + mago.height / 2);
                     flechas.push(nuevaFlecha);
                     // Agrega la nueva flecha al array
                 }
@@ -357,8 +434,8 @@ window.addEventListener('keydown', function (event) {
                     console.log('l');
                     const nuevaFlecha = new Flecha({
                         position: {
-                            x: arquero.position.x + arquero.width,
-                            y: arquero.position.y + arquero.height / 2,
+                            x: mago.position.x + mago.width,
+                            y: mago.position.y + mago.height / 2,
                         },
                         velocidad: {
                             x: 18,
@@ -368,7 +445,7 @@ window.addEventListener('keydown', function (event) {
                         width: 30,
                         color: 'yellow',
                     });
-                    nuevaFlecha.disparar(arquero.position.x + arquero.width, arquero.position.y + arquero.height / 2);
+                    nuevaFlecha.disparar(mago.position.x + mago.width, mago.position.y + mago.height / 2);
                     flechas.push(nuevaFlecha);
                     // Agrega la nueva flecha al array
                 }
@@ -377,19 +454,19 @@ window.addEventListener('keydown', function (event) {
 
         case "ArrowRight":
             keys.ArrowRight.presionada = true;
-            arquero.UltimaTeclaHorizontal = "ArrowRight";
+            mago.UltimaTeclaHorizontal = "ArrowRight";
             break;
         case "ArrowLeft":
             keys.ArrowLeft.presionada = true;
-            arquero.UltimaTeclaHorizontal = "ArrowLeft";
+            mago.UltimaTeclaHorizontal = "ArrowLeft";
             break;
         case "ArrowUp":
             keys.ArrowUp.presionada = true;
-            arquero.UltimaTeclaVertical = "ArrowUp";
+            mago.UltimaTeclaVertical = "ArrowUp";
             break;
         case "ArrowDown":
             keys.ArrowDown.presionada = true;
-            arquero.UltimaTeclaVertical = "ArrowDown";
+            mago.UltimaTeclaVertical = "ArrowDown";
             break;
 
         case "k":
@@ -400,8 +477,8 @@ window.addEventListener('keydown', function (event) {
                 daga.siendoEmpujado = true;
                 this.setTimeout(function () {
                     daga.siendoEmpujado = false;
-                    arquero.habilidadUsada = true;
-                }, 600);
+                    mago.habilidadUsada = true;
+                }, 400);
             }
 
         // if (!arquero.empuje) {
@@ -451,22 +528,24 @@ window.addEventListener('keyup', function (event) {
 function cambiarPosiciones(jugador1, jugador2) {
     var tempX = daga.position.x;
     var tempY = daga.position.y;
-    daga.position.x = arquero.position.x;
-    daga.position.y = arquero.position.y;
-    arquero.position.x = tempX;
-    arquero.position.y = tempY;
+    daga.position.x = mago.position.x;
+    daga.position.y = mago.position.y;
+    mago.position.x = tempX;
+    mago.position.y = tempY;
 }
 
-setTimeout(function () {
-    cambiarPosiciones(daga, arquero);
-    console.log('cambio');
-}, 5500);
 
 
-setTimeout(function () {
-    cambiarPosiciones(daga, arquero);
-    console.log('cambio');
-}, 10000);
+// setTimeout(function () {
+//     cambiarPosiciones(daga, mago);
+//     console.log('cambio');
+// }, 5500);
+
+
+// setTimeout(function () {
+//     cambiarPosiciones(daga, mago);
+//     console.log('cambio');
+// }, 10000);
 
 
 animate();
