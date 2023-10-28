@@ -11,7 +11,19 @@ body{
     
 
 }
+.recetashalloween{
+    display: none;
+}
 
+.contenido{
+    display: block;
+
+}
+
+.comidas{
+    width: 10vh;
+    height: 20vh;
+}
 
 .bg-trans{
     background-color: rgba(255, 255, 255, 0);
@@ -26,6 +38,9 @@ video {
     height: 100%;
     object-fit: cover;
     z-index: -1;
+}
+.click{
+    cursor: pointer;
 }
 
 .hover:hover{
