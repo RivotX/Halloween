@@ -306,7 +306,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
 
     if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height - 75 && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
-        daga.velocidad.y = -22;
+        daga.velocidad.y = -19;
 
     } else if (daga.velocidad.y > 0 && keys.s.presionada == true && daga.UltimaTeclaVertical === "s") {
         daga.velocidad.y = daga.velocidad.y = 20;
