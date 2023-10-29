@@ -22,7 +22,7 @@ body{
 
 .comidas{
     width: 10vh;
-    height: 20vh;
+    height: 30vh;
 }
 
 .bg-trans{
@@ -83,16 +83,23 @@ border-radius: 10px;
 
     border-radius: 5px;
 }
-#tarjeta{
-width: 18rem;
-}
+
+
 @media screen and (max-width:768px) {
     .recetasimg{
         height: 250px;
         
     }
+    .comidas{
+        
+    height: 15vh;
+    }
+
+    
     
 }
+
+
 @media screen and (max-width:991px) {
     
     #tarjeta{
@@ -100,6 +107,44 @@ width: 18rem;
         font-size: 0.7rem;
 
         }
+    
+        .comidas{
+        
+            height: 17vh;
+            }
+        
+        
+    
+}
+@media screen and (max-width:768px) {
+    
+    #tarjeta{
+        width: 10rem;
+        font-size: 0.7rem;
+
+        }
+    
+        
+        
+    
+}
+@media screen and (max-width:481px) {
+    
+    #tarjeta{
+        width: 8rem;
+        font-size: 0.5rem;
+        
+        }
+
+        .card-title{
+            font-size: 1rem;
+        }
+
+        #textogrande{
+            font-size: 0.6rem;
+        }
+    
+        
         
     
 }
