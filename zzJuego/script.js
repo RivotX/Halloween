@@ -10,7 +10,7 @@ c.fillRect(0, 0, canvas.width, canvas.height); //fillRect(x: number, y: number, 
 
 // ------------- lo weno ------------//
 
-const gravedad = 1; // literalmente 1px de gravedad para añadirla a la velocidad.y
+const gravedad = 0.99999; // literalmente 1px de gravedad para añadirla a la velocidad.y
 
 //clase Sprite 
 class Sprite {
@@ -88,7 +88,7 @@ class Luchador extends Sprite {
             sprites[sprite].imagen.src = sprites[sprite].imagenSrc;
 
         }
-        console.log(this.sprites);
+        this.tieneSalto = true;
     }
 
     update() {
@@ -272,6 +272,8 @@ function animateLuchador(luchador) {
     // Actualiza y pinta el luchador dado
     luchador.update();
 }
+
+var contadorr = 140;
 function animate() { //esta funcion se esta llamando a si misma, es infinita hasta que acabe el juego (bastantes fps)
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black';
@@ -285,26 +287,26 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
     if (daga.position.x < mago.position.x) {
         if (daga.siendoEmpujado && !mago.habilidadUsada && daga.position.x > 0) {
-            daga.velocidad.x = -18
+            daga.velocidad.x = -17
         }
     }
     else {
         if (daga.siendoEmpujado && !mago.habilidadUsada && daga.position.x + daga.width < canvas.width) {
-            daga.velocidad.x = 18
+            daga.velocidad.x = 17
         }
     }
     // Movilidad de daga
     if (!daga.siendoEmpujado) {
         if (keys.d.presionada && daga.UltimaTeclaHorizontal === "d" && daga.position.x + daga.width < canvas.width) {
-            daga.velocidad.x = 5;
+            daga.velocidad.x = 3;
         } else if (keys.a.presionada && daga.UltimaTeclaHorizontal === "a" && daga.position.x > 0) {
-            daga.velocidad.x = -5;
+            daga.velocidad.x = -3;
         }
     }
 
 
     if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height - 75 && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
-        daga.velocidad.y = -20;
+        daga.velocidad.y = -22;
 
     } else if (daga.velocidad.y > 0 && keys.s.presionada == true && daga.UltimaTeclaVertical === "s") {
         daga.velocidad.y = daga.velocidad.y = 20;
@@ -316,11 +318,21 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     } else if (keys.ArrowLeft.presionada && mago.UltimaTeclaHorizontal === "ArrowLeft" && mago.position.x > 0) {
         mago.velocidad.x = -3;
     }
-    if (mago.position.y + mago.height + mago.velocidad.y >= canvas.height - 75 && keys.ArrowUp.presionada == true && mago.UltimaTeclaVertical === "ArrowUp") {
-        mago.velocidad.y = -20;
+    if (mago.velocidad.y == 0) {
+        mago.tieneSalto = true;
+        contadorr = 140;
+        console.log("sd");
+    } else if (contadorr <= 0) {
+        mago.tieneSalto = false;
+    }
+    if (mago.tieneSalto && keys.ArrowUp.presionada == true && mago.UltimaTeclaVertical === "ArrowUp") {
+        mago.velocidad.y = -10;
+        contadorr--;
+        console.log(contadorr);
+    }
 
-    } else if (mago.velocidad.y > 0 && keys.ArrowDown.presionada == true && mago.UltimaTeclaVertical === "ArrowDown") {
-        mago.velocidad.y = mago.velocidad.y = 20;
+    else if (mago.velocidad.y > 0 && keys.ArrowDown.presionada == true && mago.UltimaTeclaVertical === "ArrowDown") {
+        mago.velocidad.y = mago.velocidad.y = 22;
     }
     //chatgpt (no lo sacaba) -- UPDATE DE LAS FLECHAS
     // Actualiza y muestra todas las flechas
@@ -428,7 +440,7 @@ const keys = {
 let ultimaVezDisparoFlecha = 0;
 let ultimoataque = 0;
 
-contador = 0;
+var contador = 3;
 
 window.addEventListener('keydown', function (event) {
     switch (event.key) {
@@ -542,15 +554,16 @@ window.addEventListener('keydown', function (event) {
             break;
 
         case "k":
-            keys.k.presionada = true;
-            console.log('contador :>> ', contador);
-            if (contador < 1) {
-                contador++
-                daga.siendoEmpujado = true;
-                this.setTimeout(function () {
-                    daga.siendoEmpujado = false;
-                    mago.habilidadUsada = true;
-                }, 350);
+            if (contador > 1) {
+                if (!keys.k.presionada) {
+                    keys.k.presionada = true;
+                    contador--;
+                    daga.siendoEmpujado = true;
+                    setTimeout(function () {
+                        daga.siendoEmpujado = false;
+                    }, 350);
+                    console.log('contador :>> ', contador);
+                }
             }
     }
 })
