@@ -79,10 +79,27 @@ border-radius: 10px;
     
     border-radius: 10px;
 }
+.card-body{
+
+    border-radius: 5px;
+}
+#tarjeta{
+width: 18rem;
+}
 @media screen and (max-width:768px) {
     .recetasimg{
         height: 250px;
         
     }
+    
+}
+@media screen and (max-width:991px) {
+    
+    #tarjeta{
+        width: 14rem;
+        font-size: 0.7rem;
+
+        }
+        
     
 }
