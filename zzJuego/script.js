@@ -607,7 +607,7 @@ function cambiarPosiciones(jugador1, jugador2) {
 setTimeout(function () {
     cambiarPosiciones(daga, mago);
     console.log('cambio');
-}, (Math.floor(Math.random() * 3000) + 1)
+}, (Math.floor(Math.random() * 5000) + 1)
 );
 
 
