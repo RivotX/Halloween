@@ -234,10 +234,6 @@ const mago = new Luchador({
             imagenSrc: "../zzJuego/img/MagoQuieto.png",
             framesMax: 10,
         },
-        ataque: {
-            imagenSrc: "../zzJuego/img/MagoAtaque.png",
-            framesMax: 8,
-        },
     }
 });
 mago.pintar();
@@ -273,7 +269,7 @@ function animateLuchador(luchador) {
     luchador.update();
 }
 
-var contadorr = 140;
+var contadorr = 100;
 function animate() { //esta funcion se esta llamando a si misma, es infinita hasta que acabe el juego (bastantes fps)
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black';
@@ -320,8 +316,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     }
     if (mago.velocidad.y == 0) {
         mago.tieneSalto = true;
-        contadorr = 140;
-        console.log("sd");
+        contadorr = 100;
     } else if (contadorr <= 0) {
         mago.tieneSalto = false;
     }
