@@ -307,9 +307,9 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     // Movilidad de daga
     if (!daga.siendoEmpujado) {
         if (keys.d.presionada && daga.UltimaTeclaHorizontal === "d" && daga.position.x + daga.width < canvas.width) {
-            daga.velocidad.x = 4;
+            daga.velocidad.x = 5;
         } else if (keys.a.presionada && daga.UltimaTeclaHorizontal === "a" && daga.position.x > 0) {
-            daga.velocidad.x = -4;
+            daga.velocidad.x = -5;
         }
     }
 
