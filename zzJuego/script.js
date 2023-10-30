@@ -650,14 +650,14 @@ function cambiarPosiciones(jugador1, jugador2) {
 setTimeout(function () {
     cambiarPosiciones(daga, mago);
     console.log('cambio');
-}, (Math.floor(Math.random() * 5000) + 1)
+}, (Math.floor(Math.random() * 7000) + 1)
 );
 
 
 setTimeout(function () {
     cambiarPosiciones(daga, mago);
     console.log('cambio');
-}, (Math.floor(Math.random() * 8000) + 1)
+}, (Math.floor(Math.random() * 14000) + 1)
 );
 
 
