@@ -2,7 +2,7 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');  //canvas context
 
-canvas.width = 1400;
+canvas.width = 1800;
 canvas.height = 800;
 
 c.fillRect(0, 0, canvas.width, canvas.height); //fillRect(x: number, y: number, w: number, h: number): pinta
@@ -269,7 +269,7 @@ function animateLuchador(luchador) {
     luchador.update();
 }
 
-var contadorr = 100;
+var contadorr = 70;
 function animate() { //esta funcion se esta llamando a si misma, es infinita hasta que acabe el juego (bastantes fps)
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black';
@@ -294,9 +294,9 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     // Movilidad de daga
     if (!daga.siendoEmpujado) {
         if (keys.d.presionada && daga.UltimaTeclaHorizontal === "d" && daga.position.x + daga.width < canvas.width) {
-            daga.velocidad.x = 3;
+            daga.velocidad.x = 4;
         } else if (keys.a.presionada && daga.UltimaTeclaHorizontal === "a" && daga.position.x > 0) {
-            daga.velocidad.x = -3;
+            daga.velocidad.x = -4;
         }
     }
 
@@ -310,9 +310,9 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
     // Movilidad de MAGO
     if ((keys.ArrowRight.presionada && mago.UltimaTeclaHorizontal === "ArrowRight" && mago.position.x + mago.width < canvas.width)) {
-        mago.velocidad.x = 3;
+        mago.velocidad.x = 4;
     } else if (keys.ArrowLeft.presionada && mago.UltimaTeclaHorizontal === "ArrowLeft" && mago.position.x > 0) {
-        mago.velocidad.x = -3;
+        mago.velocidad.x = -4;
     }
     if (mago.velocidad.y == 0) {
         mago.tieneSalto = true;
