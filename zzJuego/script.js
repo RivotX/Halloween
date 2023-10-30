@@ -315,7 +315,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
 
     if (daga.position.y + daga.height + daga.velocidad.y >= canvas.height - 75 && keys.w.presionada == true && daga.UltimaTeclaVertical === "w") {
-        daga.velocidad.y = -17;
+        daga.velocidad.y = -20;
 
     } else if (daga.velocidad.y > 0 && keys.s.presionada == true && daga.UltimaTeclaVertical === "s") {
         daga.velocidad.y = daga.velocidad.y = 20;
@@ -364,7 +364,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
         if (mago.hp == 1) {
             magoVidas.imagen.src = "../zzJuego/img/mago1vida.png";
-            if (mago.position.x < daga.position.x) {
+            if (mago.position.x > canvas.width/2) {
                 mago.position.x = 0;
                 mago.position.y = 0;
             }else{
@@ -400,7 +400,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
             if (daga.hp == 3) {
                 dagaVidas.imagen.src = "../zzJuego/img/daga1vida.png";
-                if (daga.position.x < mago.position.x) {
+                if (daga.position.x > canvas.width/2) {
                     daga.position.x = 0;
                     daga.position.y = 0;
                 }else{
