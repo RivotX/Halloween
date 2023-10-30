@@ -296,12 +296,12 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
     if (daga.position.x < mago.position.x) {
         if (daga.siendoEmpujado && !mago.habilidadUsada && daga.position.x > 0) {
-            daga.velocidad.x = -17
+            daga.velocidad.x = -19
         }
     }
     else {
         if (daga.siendoEmpujado && !mago.habilidadUsada && daga.position.x + daga.width < canvas.width) {
-            daga.velocidad.x = 17
+            daga.velocidad.x = 19
         }
     }
     // Movilidad de daga
@@ -591,7 +591,7 @@ window.addEventListener('keydown', function (event) {
                     daga.siendoEmpujado = true;
                     setTimeout(function () {
                         daga.siendoEmpujado = false;
-                    }, 350);
+                    }, 500);
                     console.log('contador :>> ', contador);
                 }
             }
