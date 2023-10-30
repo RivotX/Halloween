@@ -321,7 +321,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
         mago.tieneSalto = false;
     }
     if (mago.position.y > 0 && mago.tieneSalto && keys.ArrowUp.presionada == true && mago.UltimaTeclaVertical === "ArrowUp") {
-        mago.velocidad.y = -9;
+        mago.velocidad.y = -11;
         contadorr--;
         console.log(contadorr);
     }
