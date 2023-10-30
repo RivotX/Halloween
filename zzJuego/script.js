@@ -180,7 +180,7 @@ const daga = new Luchador({
     height: 150,
     width: 50,
     color: 'red',
-    hp: 3,
+    hp: 6,
     imagenSrc: "../zzJuego/img/dagaQuieto2.png",
     framesMax: 7,
     scale: 3.2,
@@ -217,7 +217,7 @@ const mago = new Luchador({
     height: 150,
     width: 50,
     color: 'blue',
-    hp: 1,
+    hp: 2,
     imagenSrc: "../zzJuego/img/MagoQuietoIzq.png",
     framesMax: 8,
     scale: 3.2,
@@ -264,10 +264,22 @@ const fondo = new Sprite({
     imagenSrc: "../zzJuego/img/fondo.gif"
 });
 
-function animateLuchador(luchador) {
-    // Actualiza y pinta el luchador dado
-    luchador.update();
-}
+const dagaVidas = new Sprite({
+    position: {
+        x: 50,
+        y: 20,
+    },
+    imagenSrc: "../zzJuego/img/dagaVidas.png",
+});
+
+const magoVidas = new Sprite({
+    position: {
+        x: 1500,
+        y: 20,
+    },
+    imagenSrc: "../zzJuego/img/mago2vidas.png",
+});
+
 
 var contadorr = 70;
 function animate() { //esta funcion se esta llamando a si misma, es infinita hasta que acabe el juego (bastantes fps)
@@ -275,9 +287,10 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     c.fillStyle = 'black';
     c.fillRect(0, 0, canvas.width, canvas.height); //pinta el fondo negro
     fondo.update();
-    animateLuchador(daga);
-    animateLuchador(mago);
-
+    daga.update();
+    mago.update();
+    dagaVidas.update();
+    magoVidas.update();
     daga.velocidad.x = 0;
     mago.velocidad.x = 0;
 
@@ -348,6 +361,18 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
         daga.isAttacking = false;
         mago.hp -= 1;
+
+        if (mago.hp == 1) {
+            magoVidas.imagen.src = "../zzJuego/img/mago1vida.png";
+            if (mago.position.x < daga.position.x) {
+                mago.position.x = 0;
+                mago.position.y = 0;
+            }else{
+                mago.position.x = canvas.width - mago.width;
+                mago.position.y = 0;
+            }
+        }
+
         if (mago.hp <= 0) {
             window.location.href = '../zzJuego/finales/DagaGana.html';
 
@@ -373,6 +398,16 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
             flechas.splice(i, 1); // Elimina la flecha al impactar
             i--;
 
+            if (daga.hp == 3) {
+                dagaVidas.imagen.src = "../zzJuego/img/daga1vida.png";
+                if (daga.position.x < mago.position.x) {
+                    daga.position.x = 0;
+                    daga.position.y = 0;
+                }else{
+                    daga.position.x = canvas.width - daga.width;
+                    daga.position.y = 0;
+                }
+            }
             if (daga.hp <= 0) {
                 window.location.href = '../zzJuego/finales/GanaMago.html';
             }
