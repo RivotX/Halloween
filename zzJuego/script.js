@@ -364,7 +364,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
         if (mago.hp == 1) {
             magoVidas.imagen.src = "../zzJuego/img/mago1vida.png";
-            if (mago.position.x > canvas.width/2) {
+            if (daga.position.x > canvas.width/2) {
                 mago.position.x = 0;
                 mago.position.y = 0;
             }else{
@@ -400,7 +400,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
 
             if (daga.hp == 3) {
                 dagaVidas.imagen.src = "../zzJuego/img/daga1vida.png";
-                if (daga.position.x > canvas.width/2) {
+                if (mago.position.x > canvas.width/2) {
                     daga.position.x = 0;
                     daga.position.y = 0;
                 }else{
