@@ -207,7 +207,7 @@ daga.pintar();
 
 const mago = new Luchador({
     position: {
-        x: 1350,
+        x: 1750,
         y: 0
     },
     velocidad: {
