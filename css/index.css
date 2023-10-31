@@ -15,7 +15,7 @@ body{
     
 
 }
-.recetashalloween{
+ecetashalloween{
     display: none;
 }
 
@@ -107,11 +107,18 @@ border-radius: 10px;
     background-color: rgb(167, 167, 167);
     color: black;
 }
+.bodyJuego{
+    background-color: rgb(34, 42, 18);
+}
+
+.boton4{
+    margin-left: 45%;
+}
 .textoJuego{
     background-color: rgba(0, 0, 0, 0.459);
     color: white;
     border-radius: 10px;
-    height: 40vh;
+    height: 45vh;
     margin-top: 25vh;
 }
 .textJuego{
