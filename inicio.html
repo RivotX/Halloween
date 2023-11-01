@@ -28,6 +28,7 @@
       filter: brightness(30%);
       animation: saltar 1s infinite;
       transition: all 1s;
+      border-radius: 100%;
     }
 
     @keyframes saltar {
@@ -97,44 +98,42 @@
   filter: blur(0px);
 }
 
-10% {
-  filter: blur(10px);
-}
 
-20% {
+
+2% {
   filter: blur(20px);
 }
 
-30% {
 
-  filter: blur(30px);
-}
-40% {
-
-filter: blur(40px);
-}
-50% {
-  filter: blur(50px);
+4% {
+  filter: blur(40px);
 }
 
-60% {
+6% {
   filter: blur(60px);
 }
 
-70% {
-  filter: blur(70px);
-}
-80% {
+8% {
   filter: blur(80px);
 }
-90% {
-  filter: blur(90px);
-}
-100%{
+10% {
   filter: blur(100px);
 }
+12% {
+  filter: blur(120px);
+}
+14%{
+  filter: blur(140px);
+}
+16%{
+  filter: blur(160px);
+}
+
 
 }
+    
+
+
 
     .calavera:hover {
       animation: brillo 1s;
@@ -144,14 +143,18 @@ filter: blur(40px);
     }
 
     
-
+audio{
+  visibility: hidden;
+  position: fixed;
+}
   </style>
 </head>
 
 <body class="bodyinicio">
+  <audio id="audio" src="sonidos/Sonido risa malvada_ZZbo7eIbTCs.mp3" controls></audio>
   <div class="container pt-5 mt-5">
 
-    <div class="container  h-50 w-50 calavera"></div>
+    <div class="container  h-50 w-50 calavera" onclick="entrar()"></div>
   </div>
 
 </body>
