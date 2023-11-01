@@ -110,6 +110,9 @@ border-radius: 10px;
 .bodyJuego{
     background-color: rgb(34, 42, 18);
 }
+#textogrande{
+    padding-left: 10%;
+}
 
 .boton4{
     margin-left: 45%;
@@ -125,6 +128,9 @@ border-radius: 10px;
     padding: 60px;
 }
 
+.recetashalloween{
+    display: none;
+}
 
 @media screen and (max-width:768px) {
     .recetasimg{
@@ -185,7 +191,7 @@ border-radius: 10px;
             font-size: 0.6rem;
         }
     
-        
+       
         
     
 }
