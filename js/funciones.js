@@ -11,7 +11,7 @@ function entrar(){
 elemento.style.animation="desvanecido 8s"
 audio.play();
 setTimeout(() => {
-    window.location.href="../Halloween/html/index.html";
+    window.location.href="../html/inicio.html";
     
 }, 3000);
 
