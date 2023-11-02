@@ -11,14 +11,14 @@ function entrar(){
 elemento.style.animation="desvanecido 8s"
 audio.play();
 setTimeout(() => {
-    window.location.href=  "/html/inicio.html";
+    window.location.href=  "html/inicio.html";
     
 }, 3000);
 
 }
 function musica() {
     const elemento=document.getElementById("audio");
-    elemento.play()
+    elemento.play();
 
     
 }
