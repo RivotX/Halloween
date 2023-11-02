@@ -16,3 +16,9 @@ setTimeout(() => {
 }, 3000);
 
 }
+function musica() {
+    const elemento=document.getElementById("audio");
+    elemento.play()
+
+    
+}
