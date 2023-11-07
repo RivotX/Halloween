@@ -342,7 +342,7 @@ function animate() { //esta funcion se esta llamando a si misma, es infinita has
     else if (mago.velocidad.y > 0 && keys.ArrowDown.presionada == true && mago.UltimaTeclaVertical === "ArrowDown") {
         mago.velocidad.y = mago.velocidad.y = 22;
     }
-    //chatgpt (no lo sacaba) -- UPDATE DE LAS FLECHAS
+    // UPDATE DE LAS FLECHAS
     // Actualiza y muestra todas las flechas
     for (let i = 0; i < flechas.length; i++) {
         flechas[i].update();
